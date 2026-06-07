@@ -1,0 +1,2 @@
+# Commit 1 uses only the Python standard library.
+# openpyxl/pandas are optional if you prefer them over the bundled xlsx reader.
