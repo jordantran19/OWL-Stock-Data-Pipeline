@@ -5,5 +5,3 @@ __pycache__/
 venv/
 data/stocks.db
 *.egg-info/
-
-README.md
