@@ -33,11 +33,34 @@ GROUP BY c.id
 ORDER BY cumulative_return DESC;
 """
 
+LATEST_MARKET_CAP_SQL = """
+SELECT
+    c.name AS company,
+    s.sector_level1,
+    dp.asof AS asof,
+    dp.close_usd,
+    dp.mktcap_usd
+FROM companies c
+JOIN company_sectors cs ON cs.company_id = c.id
+JOIN sectors s ON s.id = cs.sector_id
+JOIN daily_prices dp ON dp.company_id = c.id
+WHERE dp.asof = (
+    SELECT MAX(asof) FROM daily_prices WHERE company_id = c.id
+)
+ORDER BY dp.mktcap_usd DESC;
+"""
+
 
 def run_cumulative_return_query(db_path: Path) -> list[sqlite3.Row]:
     with sqlite3.connect(db_path) as connection:
         connection.row_factory = sqlite3.Row
         return list(connection.execute(CUMULATIVE_RETURN_SQL))
+
+
+def run_latest_market_cap_query(db_path: Path) -> list[sqlite3.Row]:
+    with sqlite3.connect(db_path) as connection:
+        connection.row_factory = sqlite3.Row
+        return list(connection.execute(LATEST_MARKET_CAP_SQL))
 
 
 def format_results(rows: list[sqlite3.Row]) -> str:

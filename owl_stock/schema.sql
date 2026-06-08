@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS daily_prices (
     asof TEXT NOT NULL,
     volume INTEGER NOT NULL,
     close_usd REAL NOT NULL,
+    mktcap_usd REAL,
     PRIMARY KEY (company_id, asof)
 );
 
